@@ -36,7 +36,7 @@ def send():
     while True:
         mssg = input("")
         try:
-            client.send(f"[{nickname}] : {mssg}".encode('ascii'))
+            client.send(f"{mssg}".encode('ascii'))
         except:
             sys.exit()
 

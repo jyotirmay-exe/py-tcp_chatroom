@@ -19,18 +19,22 @@ admin = None
 clients = []
 nicknames = []
 
-def broadcast(mssg):
+def broadcast(mssg,cl=None):
     with open("configs/chat-log.txt",'a') as log:
         log.write(f'[{datetime.now().strftime("%d/%m/%y %T")}] {mssg}\n')
-    for cl in clients:
-        cl.send(mssg.encode('ascii'))
+    for client in clients:
+        if cl is not None:
+            brdcast = f"{nicknames[clients.index(cl)]} : {mssg}"
+            client.send(brdcast.encode('ascii'))
+        else:
+            client.send(mssg.encode('ascii'))
 
 def listen(cl):
     while True:
         try:
             msg = cl.recv(1024).decode('ascii')
-            broadcast(msg)
-        except:
+            broadcast(mssg=msg,cl=cl)
+        except Exception as ex:
             nick = nicknames[clients.index(cl)]
             clients.remove(cl)
             print(f'{nick} disconnected.')
